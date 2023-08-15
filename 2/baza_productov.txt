@@ -1,0 +1,6 @@
+1000, Coca-Cola, 50
+1001, Fanta, 50
+1002, Sprite, 50
+1003, Orbit, 35
+1004, Mentos, 45
+1005, Snickers, 55
