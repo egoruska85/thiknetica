@@ -17,6 +17,23 @@ class Station
   #end
   ######### Вывод всех поездов находящие на стации #####
   def show_trains
-    @trains.each { |train| puts train }
+    @pas = 0
+    @gru = 0
+    @trains.each do |train|
+      if train[1] == 1
+        @pas += 1
+      elsif train[1] == 2
+        @gru += 1
+      end
+    end
+    @trains.each do |train|
+      train[0].each do |key, value|
+        print "#{key}(#{value}); "
+      end
+    end
+    puts ''
+    puts "###############################"
+    puts "Пассажирские составы #{@pas}"
+    puts "Грузовые составы #{@gru}"
   end
 end

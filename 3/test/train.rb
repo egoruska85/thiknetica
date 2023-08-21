@@ -1,18 +1,20 @@
 class Train
+    attr_reader :type_trains, :type_train
   ##### Создание поезда ######
   def initialize(number, type_train, quantity)
-    @number = number
-    type_trains = { 1 => 'Пассажирский', 2 => 'Грузовой' }
-    @type_train = type_trains[type_train]
+    @type_trains = { 1 => 'Пассажирский', 2 => 'Грузовой' }
+    @train = {}
+    @train[number] = @type_trains[type_train]
     @number_of_wagons = quantity
+    @type_train = type_train
     @spped = 0
   end
   ###### Ручное управление ######
   def start(i)
     @speed = i
     puts @speed
-    @route.stations[@num_station].trains.delete(@number)
-    @route.stations[@num_station].sent_trains << @number
+    @route.stations[@num_station].trains.delete([@train, @type_train])
+    @route.stations[@num_station].sent_trains << [@train, @type_train]
   end
 
   def up_speed(i)
@@ -33,8 +35,8 @@ class Train
     @speed = 0
     @num_station += 1
     @current_station = @route.stations[@num_station]
-    @route.stations[@num_station].trains << @number
-    @route.stations[@num_station].arrived << @number
+    @route.stations[@num_station].trains << [@train, @type_train]
+    @route.stations[@num_station].arrived << [@train, @type_train]
   end
   def up_wagons(i)
     @number_of_wagons += i if @speed == 0
@@ -50,15 +52,15 @@ class Train
   ####Автомашинист########Нужно стартануть(start)#####
   def next_station
     @num_station += 1
-    @route.stations[@num_station].trains << @number if @speed > 0
-    @route.stations[@num_station].arrived << @number if @speed > 0
+    @route.stations[@num_station].trains << [@train, @type_train] if @speed > 0
+    @route.stations[@num_station].arrived << [@train, @type_train] if @speed > 0
     @speed = 0
   end
   def previous_station
-    @route.stations[@num_station].trains.delete(@number)
+    @route.stations[@num_station].trains.delete([@train, @type_train])
     @num_station -= 1
-    @route.stations[@num_station].trains << @number if @speed > 0
-    @route.stations[@num_station].arrived << @number if @speed > 0
+    @route.stations[@num_station].trains << [@train, @type_train] if @speed > 0
+    @route.stations[@num_station].arrived << [@train, @type_train] if @speed > 0
     @speed = 0
   end
   #####Указание маршрута#####
@@ -66,8 +68,8 @@ class Train
     @route = route
     @num_station = 0
     @current_station = @route.stations[@num_station]
-    @route.stations[@num_station].trains << @number
-    @route.stations[@num_station].arrived << @number
+    @route.stations[@num_station].trains << [@train, @type_train]
+    @route.stations[@num_station].arrived << [@train, @type_train]
   end
   def show_current_station
     puts @current_station
