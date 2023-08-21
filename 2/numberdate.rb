@@ -15,7 +15,9 @@ loop do
 
   a = days[month].to_i + date.to_i
 
-  if v_year == 0 and a > days['03']
+  if date == '29' and month == '02' and v_year == 0
+    puts "#{days[month].to_i + date.to_i}"
+  elsif v_year == 0 and a > days['03']
     puts "#{days[month].to_i + date.to_i + 1}"
   elsif v_year == 0
     puts "#{days[month].to_i + date.to_i}"
