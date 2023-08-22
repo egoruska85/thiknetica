@@ -1,20 +1,27 @@
 class Train
-    attr_reader :type_trains, :type_train
+  attr_reader :type_train, :speed, :route, :carriages_amount, :number
   ##### Создание поезда ######
   def initialize(number, type_train, quantity)
-    @type_trains = { 1 => 'Пассажирский', 2 => 'Грузовой' }
-    @train = {}
-    @train[number] = @type_trains[type_train]
-    @number_of_wagons = quantity
-    @type_train = type_train
+    @number = number
+    type_trains = { 1 => 'Пассажирский', 2 => 'Грузовой' }
+    @type_train = type_trains[type_train]
+    @carriages_amount = quantity
     @spped = 0
+  end
+  def next_station
+    route.stations[@num_station + 1]
+  end
+  def previous_station
+    route.stations[@num_station - 1] unless @num_station == 0
+  end
+  def current_station
+    route.stations[@num_station]
   end
   ###### Ручное управление ######
   def start(i)
     @speed = i
     puts @speed
-    @route.stations[@num_station].trains.delete([@train, @type_train])
-    @route.stations[@num_station].sent_trains << [@train, @type_train]
+    current_station.send_train(self)
   end
 
   def up_speed(i)
@@ -22,7 +29,7 @@ class Train
     puts @speed
   end
   def down_speed(i)
-    @speed -= i if @speed > 10
+    @speed -= i if @speed > 0
     puts @speed
   end
   def stop
@@ -33,45 +40,40 @@ class Train
   end
   def stop_station
     @speed = 0
+    next_station.add_train(self)
     @num_station += 1
-    @current_station = @route.stations[@num_station]
-    @route.stations[@num_station].trains << [@train, @type_train]
-    @route.stations[@num_station].arrived << [@train, @type_train]
   end
-  def up_wagons(i)
-    @number_of_wagons += i if @speed == 0
+  def up_to_carriages(quantity)
+    carriages_amount += quantity if @speed == 0
 
   end
-  def down_wagons(i)
-    @number_of_wagons -= i if @speed == 0
+  def down_to_carriages(quantity)
+    carriages_amount -= quantity if @speed == 0 && carriages_amount > quantity
+  end
+  def show_carriages
+    puts carriages_amount
+  end
 
-  end
-  def show_wagons
-    puts @number_of_wagons
-  end
-  ####Автомашинист########Нужно стартануть(start)#####
-  def next_station
-    @num_station += 1
-    @route.stations[@num_station].trains << [@train, @type_train] if @speed > 0
-    @route.stations[@num_station].arrived << [@train, @type_train] if @speed > 0
-    @speed = 0
-  end
-  def previous_station
-    @route.stations[@num_station].trains.delete([@train, @type_train])
-    @num_station -= 1
-    @route.stations[@num_station].trains << [@train, @type_train] if @speed > 0
-    @route.stations[@num_station].arrived << [@train, @type_train] if @speed > 0
-    @speed = 0
-  end
   #####Указание маршрута#####
   def enter_route(route)
     @route = route
     @num_station = 0
-    @current_station = @route.stations[@num_station]
-    @route.stations[@num_station].trains << [@train, @type_train]
-    @route.stations[@num_station].arrived << [@train, @type_train]
+    route.start_station.add_train(self)
   end
-  def show_current_station
-    puts @current_station
+  #### Передвижение поезда между стациями #####
+  def move_to_next_station
+    if next_station
+      current_station.send_train(self)
+      next_station.add_train(self)
+      @num_station+= 1
+    end
   end
+  def move_to_previous_station
+    if previous_station
+      current_station.send_train(self)
+      previous_station.add_train(self)
+      @num_station -= 1
+    end
+  end
+
 end

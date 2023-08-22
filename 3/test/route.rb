@@ -1,21 +1,26 @@
 class Route
-  attr_reader :start, :finish, :stations 
+  attr_reader :stations
+
+  attr_reader :start, :finish, :stations
   def initialize(start, finish)
-    @start = start
-    @finish = finish
-    @stations = []
+    @stations = [start, finish]
   end
-  def add_station(station, position)
-    @stations.unshift @start unless @stations.include? @start
-    @stations << @finish unless @stations.include? @finish
-    @stations[position - 1] = station unless @stations.include?(station)
-    @stations << @finish unless @stations.include? @finish
+  def add_station(station)
+    stations.insert(-2, station).uniq
   end
   def destroy_station(station)
-    @stations.delete(station)
+    return if [start, finish].include?(station)
+    stations.delete(station)
+  end
+  def start_station
+    stations.first
+  end
+
+  def finish_station
+    stations.last
   end
   def show_stations
     numeric = 0
-    @stations.each { |station| puts "#{numeric += 1}) #{station}" }
+    stations.each { |station| puts "#{numeric += 1}) #{station.name}" }
   end
 end

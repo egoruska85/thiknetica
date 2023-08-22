@@ -1,4 +1,5 @@
 class Station
+  attr_reader :trains, :name
   ### Созлание станции #######
   attr_reader :name, :trains, :sent_trains, :arrived
   def initialize(name)
@@ -7,33 +8,17 @@ class Station
     @sent_trains = []
     @arrived = []
   end
-  #def add_train(train)
-  #  @arrived << train
-  #  @trains << train
-  #end
-  #def destroy_train(train)
-  #  @sent_trains << train
-  #  @trains.delete(train)
-  #end
+  def add_train(train)
+    @arrived << train.number
+    @trains << train
+  end
+  def send_train(train)
+    @sent_trains << train.number
+    @trains.delete(train)
+  end
   ######### Вывод всех поездов находящие на стации #####
-  def show_trains
-    @pas = 0
-    @gru = 0
-    @trains.each do |train|
-      if train[1] == 1
-        @pas += 1
-      elsif train[1] == 2
-        @gru += 1
-      end
-    end
-    @trains.each do |train|
-      train[0].each do |key, value|
-        print "#{key}(#{value}); "
-      end
-    end
-    puts ''
-    puts "###############################"
-    puts "Пассажирские составы #{@pas}"
-    puts "Грузовые составы #{@gru}"
+  def show_trains(type_train)
+    type_trains = { 1 => 'Пассажирский', 2 => 'Грузовой' }
+    trains.select{ |train| train.type_train == type_trains[type_train] }
   end
 end
