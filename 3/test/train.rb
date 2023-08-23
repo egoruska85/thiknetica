@@ -6,7 +6,7 @@ class Train
     type_trains = { 1 => 'Пассажирский', 2 => 'Грузовой' }
     @type_train = type_trains[type_train]
     @carriages_amount = quantity
-    @spped = 0
+    @speed = 0
   end
   def next_station
     route.stations[@num_station + 1]
@@ -44,11 +44,10 @@ class Train
     @num_station += 1
   end
   def up_to_carriages(quantity)
-    carriages_amount += quantity if @speed == 0
-
+    @carriages_amount += quantity if @speed == 0
   end
   def down_to_carriages(quantity)
-    carriages_amount -= quantity if @speed == 0 && carriages_amount > quantity
+    @carriages_amount -= quantity if @speed == 0 && carriages_amount > quantity
   end
   def show_carriages
     puts carriages_amount
