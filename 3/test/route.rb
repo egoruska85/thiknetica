@@ -1,7 +1,7 @@
 class Route
   attr_reader :stations
 
-  attr_reader :start, :finish, :stations
+
   def initialize(start, finish)
     @stations = [start, finish]
   end
@@ -9,7 +9,6 @@ class Route
     stations.insert(-2, station).uniq
   end
   def destroy_station(station)
-    return if [start, finish].include?(station)
     stations.delete(station)
   end
   def start_station
