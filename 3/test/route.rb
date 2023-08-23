@@ -9,6 +9,7 @@ class Route
     stations.insert(-2, station).uniq
   end
   def destroy_station(station)
+    return if [start_station, finish_station].include?(station)
     stations.delete(station)
   end
   def start_station
