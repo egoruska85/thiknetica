@@ -62,9 +62,6 @@ class Train
     route.start_station.add_train(self)
   end
 
-
-  private #Для того чтобы они были доступны внутри класса
-
   attr_reader :stations
   attr_writer :number_station
 

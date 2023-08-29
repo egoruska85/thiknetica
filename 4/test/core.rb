@@ -7,40 +7,44 @@ class Core
     puts ''
     puts "###### КОМАНДЫ ДЛЯ УПРАВЛЕНИЯ ПРОГРАММОЙ ###### "
     @commands.each do |key, value|
-      puts "#{key})#{value}"
+      puts "\t\t\t\t#{key})#{value}\n\n".upcase
     end
   end
 
   def process_start(key)
     @key = key
     if key == 1
-      create_station
+      stations_managment
     elsif key == 2
-      view_stations
+      trains_managment
     elsif key == 3
-      train_managment
-    elsif key == 4
       routes_management
-    elsif key == 5
+    elsif key == 4
       carriages_managment
-    elsif 6
+    elsif key == 5
       control_interface
+    elsif key == 6
+      view_trains_on_station
     end
   end
 
 
-  def create_station
+  def stations_managment
     view_title
-    print 'Введите название станции (e- выйти из создания станций):'
+    puts "\t(l- Вывод список станций)" if stations.any?
+    puts "\t(e- выйти из создания станций)"
+    print 'Введите название станции: '
     name_station = gets.chomp.to_s
     if name_station == 'e'
       main_menu
+    elsif name_station == 'l'
+      view_stations
     else
       station = Station.new(name_station.capitalize)
       puts "Созданая станция сохранена: #{station.name}(#{station.inspect})"
       @stations << station
       puts "--------------------------------\nСоздано"
-      create_station
+      stations_managment
     end
   end
 
@@ -49,9 +53,10 @@ class Core
     puts "\n #### #{@commands[key].upcase} #### \n \n"
     stations.each{|station| puts station.name}
     puts "--------------------------------\nВыполнено"
+    stations_managment
   end
 
-  def train_managment
+  def trains_managment
     view_title
     puts "###### Список поездов ######"
     @trains.each_with_index { |train, index| puts "#{index += 1})#{train.number}(#{train.type})"}
@@ -64,13 +69,13 @@ class Core
     elsif number_train == 'r'
       if @trains.empty?
         puts "У вас нету созданных поездов в системе"
-        train_managment
+        trains_managment
       else
         loop do
           @trains.each_with_index { |train, index| puts "#{index += 1})#{train.number}(#{train.type})"}
           print "\nВведите какому поезду назначить маршрут(e - Назад):"
           enter_train = gets.chomp
-          train_managment if enter_train == 'e'
+          trains_managment if enter_train == 'e'
           @routes.each_with_index { |route, index| puts "#{index += 1})#{route.start_station.name}=>#{route.finish_station.name}"}
           print "\nВведите какой маршрут хотите назначить поезду:"
           enter_route = gets.chomp
@@ -85,12 +90,12 @@ class Core
       passenger_train = PassengerTrain.new(number_train.to_i)
       @trains << passenger_train
       puts "Создан поезд с номером #{passenger_train.number}(#{passenger_train.type})"
-      train_managment
+      trains_managment
     elsif type == 2
       cargo_train = CargoTrain.new(number_train.to_i)
       @trains << cargo_train
       puts "Создан поезд с номером #{cargo_train.number}(#{cargo_train.type})"
-      train_managment
+      trains_managment
     elsif type != 1 or type != 2
       puts "--------------------\n Ошибка(Вы неправильно ввели категорию поезда)"
       create_train
@@ -101,7 +106,7 @@ class Core
     view_title
     if stations.size < 2
       puts "У вас должны созданы как минимум 2 станции для продолжения"
-      create_station
+      stations_managment
     end
     if @routes.empty?
       puts "1)Создать маршрут\n0)Выход из режима"
@@ -321,8 +326,82 @@ class Core
 
   def control_interface
     view_title
-    a = gets
-
+    if trains.empty?
+      puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО ПОЕЗДА !!!!!!'
+      puts '                                !!!!!!       СОЗДАЙТЕ ХОТЯ БЫ ОДИН ПОЕЗД    !!!!!!'
+      trains_managment
+    elsif routes.empty?
+      puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО МАРШРУТА !!!!!!'
+      puts '                                !!!!!!      СОЗДАЙТЕ ХОТЯ БЫ ОДИН МАРШРУТ     !!!!!!'
+      routes_management
+    end
+    puts '################# Маршруты к которым добавлен состав и на каких они станция в данный момент ###############################'
+    puts
+    loop do
+      trains.each_with_index do |train, index|
+        puts "#{index + 1} #{train.number} находится на #{train.current_station.name} количество вагонов: #{train.carriages.length}"
+      end
+      print "Выберите состав: "
+      enter_index = gets.to_i
+      enter_train = trains[enter_index - 1]
+      print "\t 1) Отправить на следующию станцию?\n"
+      print "\t 2) Отправить на предыдущую станцию?\n"
+      print "\t 3) Просто поехать?\n"
+      print "\t 4) Затормозить?\n"
+      print "\t 0) Выйти\n"
+      print "Выбран поезд #{enter_train.number} что вы желаете с ним сделать: "
+      enter_action = gets.to_i
+      if enter_action == 1
+        if enter_train.move_to_next_station
+          puts "поезд c #{enter_train.number} перемещен вперед на 1 станцию, текущая станция = #{enter_train.current_station.name}"
+        else
+          puts "Поезд не может быть перемещен вперед, так как находится на конечной станции маршрута"
+        end
+      elsif enter_action == 2
+        if enter_train.move_to_previous_station
+          puts "поезд c #{enter_train.number} перемещен назад на 1 станцию, текущая станция = #{enter_train.current_station.name}"
+        else
+          puts "Поезд не может быть перемещен вперед, так как находится на начальной станции маршрута"
+        end
+      elsif enter_action == 3
+        speed = gets.to_i
+        if enter_train.move(speed)
+          puts 'Поехали!'
+        end
+      elsif enter_action == 4
+        if enter_train.stop
+          puts 'Поехали!'
+        end
+      elsif enter_action == 0
+        main_menu
+      end
+    end
+  end
+  def view_trains_on_station
+    if stations.empty?
+      puts '                               !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОЙ СТАНЦИИ !!!!!!'
+      puts '                               !!!!!!      СОЗДАЙТЕ ХОТЯ БЫ ОДНУ СТАНЦИЮ   !!!!!!'
+    stations_managment
+    elsif routes.empty?
+    puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО МАРШРУТА !!!!!!'
+    puts '                                !!!!!!      СОЗДАЙТЕ ХОТЯ БЫ ОДИН МАРШРУТ     !!!!!!'
+    routes_management
+    elsif trains.empty?
+    puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО ПОЕЗДА !!!!!!'
+    puts '                                !!!!!!       СОЗДАЙТЕ ХОТЯ БЫ ОДИН ПОЕЗД    !!!!!!'
+    trains_managment
+    end
+    loop do
+    stations.each_with_index {|station, index| puts "#{1}#{ station.name } "}
+    puts "Выберите станцию, для которой хотите посмотреть список поездов(e - Выход):"
+    enter = gets.chomp
+    main_menu if enter == 'e'
+    station = stations[enter.to_i]
+      if station
+        puts "\nСписок поездов на станции #{station.name}"
+        station.trains.each{|train| puts train.inspect}
+      end
+    end
   end
 
   def view_title
