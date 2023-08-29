@@ -16,9 +16,9 @@ class Core
     if key == 1
       stations_managment
     elsif key == 2
-      trains_managment
-    elsif key == 3
       routes_management
+    elsif key == 3
+      trains_managment
     elsif key == 4
       carriages_managment
     elsif key == 5
@@ -306,22 +306,26 @@ class Core
     attached_carriages.uniq!
     attached_carriages.compact!
     if result
-      puts "Остановите поезд пожалуйста!" if train.errors[0][0] > 0
+      puts "\nОстановите поезд пожалуйста!\n" if train.errors[0][0] > 0
       puts "\nВагон несовместим с данным типом поезда\n" if train.errors[0][1] != train.errors[0][2]
     else
       puts "К поезду №#{train.number} присоеденён вагон #{attached_carriages.last}"
     end
     @carriages.delete(attached_carriages.last)
-    puts "Вагоны присоеденёные к составам: #{attached_carriages.inspect}\n"
+    puts "\nВагоны присоеденёные к составам: #{attached_carriages.inspect}\n"
     puts "\n#{train.inspect}"
   end
 
   def disconnect_carriage_from_train(train, number_carriage)
     carriage = train.carriages[number_carriage]
-    train.disattach_carriages(carriage)
-    attached_carriages.delete(carriage)
-    carriages.push(carriage)
-    puts "Отсоеденён вагон от поезда #{train.number}=> #{carriages.last}"
+    if train.disattach_carriages(carriage)
+      puts "\nОстановите поезд пожалуйста!\n" if train.errors[0][0] > 0
+    else
+      attached_carriages.delete(carriage)
+      carriages.push(carriage)
+      puts "Отсоеденён вагон от поезда #{train.number}=> #{carriages.last}"
+    end
+
   end
 
   def control_interface
@@ -341,15 +345,16 @@ class Core
       trains.each_with_index do |train, index|
         puts "#{index + 1} #{train.number} находится на #{train.current_station.name} количество вагонов: #{train.carriages.length}"
       end
-      print "Выберите состав: "
+      print "Выберите состав (0 - Выход): "
       enter_index = gets.to_i
+      main_menu if enter_index == 0
       enter_train = trains[enter_index - 1]
       print "\t 1) Отправить на следующию станцию?\n"
       print "\t 2) Отправить на предыдущую станцию?\n"
       print "\t 3) Просто поехать?\n"
       print "\t 4) Затормозить?\n"
       print "\t 0) Выйти\n"
-      print "Выбран поезд #{enter_train.number} что вы желаете с ним сделать: "
+      print "Выбран поезд #{enter_train.number} что вы желаете с ним сделать: (e- Выход)"
       enter_action = gets.to_i
       if enter_action == 1
         if enter_train.move_to_next_station
@@ -364,13 +369,14 @@ class Core
           puts "Поезд не может быть перемещен вперед, так как находится на начальной станции маршрута"
         end
       elsif enter_action == 3
+        print "Укажите скорость: "
         speed = gets.to_i
         if enter_train.move(speed)
-          puts 'Поехали!'
+          puts "\nПоехали!"
         end
       elsif enter_action == 4
         if enter_train.stop
-          puts 'Поехали!'
+          puts 'STOP!'
         end
       elsif enter_action == 0
         main_menu
@@ -379,24 +385,25 @@ class Core
   end
   def view_trains_on_station
     if stations.empty?
-      puts '                               !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОЙ СТАНЦИИ !!!!!!'
-      puts '                               !!!!!!      СОЗДАЙТЕ ХОТЯ БЫ ОДНУ СТАНЦИЮ   !!!!!!'
+      puts '                                 !!!!!!  ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОЙ СТАНЦИИ !!!!!!'
+      puts '                               !!!!!!  СОЗДАЙТЕ ХОТЯ БЫ ОДНУ СТАНЦИЮ, А ЛУЧШЕ ДВЕ !!!!!!'
     stations_managment
     elsif routes.empty?
-    puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО МАРШРУТА !!!!!!'
-    puts '                                !!!!!!      СОЗДАЙТЕ ХОТЯ БЫ ОДИН МАРШРУТ     !!!!!!'
+      puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО МАРШРУТА !!!!!!'
+      puts '                                !!!!!!      СОЗДАЙТЕ ХОТЯ БЫ ОДИН МАРШРУТ     !!!!!!'
     routes_management
     elsif trains.empty?
-    puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО ПОЕЗДА !!!!!!'
-    puts '                                !!!!!!       СОЗДАЙТЕ ХОТЯ БЫ ОДИН ПОЕЗД    !!!!!!'
+      puts '                                !!!!!! ВНИМАНИЕ У ВАС НЕТУ НИ ОДНОГО ПОЕЗДА !!!!!!'
+      puts '                                !!!!!!       СОЗДАЙТЕ ХОТЯ БЫ ОДИН ПОЕЗД    !!!!!!'
     trains_managment
     end
+    view_title
     loop do
     stations.each_with_index {|station, index| puts "#{1}#{ station.name } "}
     puts "Выберите станцию, для которой хотите посмотреть список поездов(e - Выход):"
     enter = gets.chomp
     main_menu if enter == 'e'
-    station = stations[enter.to_i]
+    station = stations[enter.to_i - 1]
       if station
         puts "\nСписок поездов на станции #{station.name}"
         station.trains.each{|train| puts train.inspect}

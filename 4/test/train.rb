@@ -43,13 +43,13 @@ class Train
   def attach_carriages(carriage)
     @carriages << carriage if speed == 0 && type == carriage.type
     @errors = []
-    @errors << [speed, type, carriage.type] if speed != 0 or type != carriage.type
+    @errors << [speed, type, carriage.type] if speed > 0 or type != carriage.type
   end
 
   def disattach_carriages(carriage)
     @carriages.delete(carriage) if speed == 0 && @carriages.length > 0
     @errors = []
-    @errors << [speed, type, carriage.type] if speed != 0
+    @errors << [speed, type, carriage.type] if speed > 0
   end
 
   def show_carriages_quantity
