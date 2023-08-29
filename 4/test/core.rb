@@ -125,7 +125,7 @@ class Core
   end
 
   def create_route
-    puts "\n #### #{@commands[key].upcase} #### \n \n"
+    view_title
     puts "#### Созданные станции ####"
     @available_stations = @stations.clone
     @available_stations.each_with_index {|station, index| puts "#{index += 1})#{station.name}" }
@@ -166,8 +166,8 @@ class Core
   end
 
   def edit_route
+    view_title
     @available_stations = @stations.clone
-    puts "\n #### #{@commands[key].upcase} #### \n \n"
     puts "#### Редактировать маршрут ####"
     i = 0
     @routes.each { |route| puts "#{ i+= 1})#{route.start_station.name} => #{route.finish_station.name}" }
