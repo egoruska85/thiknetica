@@ -1,5 +1,5 @@
 class Train
-  attr_reader :type, :speed, :route, :carriages, :number, :errors
+  attr_reader :speed, :route, :carriages, :number, :errors
   def initialize(number)
     @number = number
     @carriages = []
@@ -59,18 +59,15 @@ class Train
   def enter_route(route)
     @route = route
     @number_station = 0
-    route.start_station.add_train(self)
+    current_station.add_train(self)
   end
 
-  attr_reader :stations
-  attr_writer :number_station
-
   def next_station
-    route.stations[@number_station + 1] if route.stations[@number_station] != route.stations.last
+    route.stations[@number_station + 1]
   end
 
   def previous_station
-    route.stations[@number_station - 1] unless @number_station == 0
+    route.stations[@number_station - 1] if @number_station > 0 #здесь нужна проверка иначе значение будет -1 и тода поезд будет перемещен на конечную станию
   end
 
   def current_station
