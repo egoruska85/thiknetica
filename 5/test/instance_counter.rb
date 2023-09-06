@@ -16,7 +16,7 @@ module InstanceCounter
 
     private
 
-    def register
+    def register_instance
       src = self.class
       counter = self.class.class_variable_get(:@@instance_hash)
       counter[src.to_s] += 1
