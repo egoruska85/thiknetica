@@ -270,7 +270,7 @@ class Core
         carriages.each_with_index { |carriage, index| puts "#{index += 1})#{carriage.type} => #{carriage.inspect}"}
         error_no_created_carriages if @carriages.empty?
         section_separator
-        enter_train_for_carriages
+        enter_train_for
         enter_train = gets.chomp
         carriages_managment if enter_train == 'e'
         enter_menu_carriage
@@ -290,7 +290,7 @@ class Core
           end
         end
         section_separator
-        enter_train_for_carriages
+        enter_train
         enter = gets.chomp
         carriages_managment if enter == 'e'
         enter_menu_carriages_what_carrige
@@ -339,16 +339,16 @@ class Core
       error_no_created_routes
       routes_management
     end
-    puts '################# Маршруты к которым добавлен состав и на каких они станция в данный момент ###############################'
+    ontrol_interface_title_routes
     puts
     loop do
       trains.each_with_index do |train, index|
         puts "#{index + 1} #{train.number} находится на #{train.current_station.name} количество вагонов: #{train.carriages.length}"
       end
-      print "Выберите состав (0 - Выход): "
-      enter_index = gets.to_i
-      main_menu if enter_index == 0
-      enter_train = trains[enter_index - 1]
+      enter_train
+      enter_index = gets.chomp
+      main_menu if enter_index == 'e'
+      enter_train = trains[enter_index.to_i - 1]
       print "\t 1) Отправить на следующию станцию?\n"
       print "\t 2) Отправить на предыдущую станцию?\n"
       print "\t 3) Просто поехать?\n"

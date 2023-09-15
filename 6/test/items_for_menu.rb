@@ -2,6 +2,7 @@ module ItemsForMenu
   COMMANDS = {1 => 'Менеджер станций', 2 => 'Менеджер маршрутов', 3 => 'Менеджер поездов', 4 => 'Менеджер вагонов', 5 => 'Интерфейс управления поездами', 6 => 'Стастистика по станциям и поездам' }.freeze
 
   TAB = "\n\t\t\t\t\t"
+  CONTROL_INTERFACE_TITLE_ROUTES = '### Маршруты к которым добавлен состав и на каких они станция в данный момент #########################'.freeze
   SECTION_SEPARATOR = '#######################################################################################################'.freeze
 
   LIST_TRAINS = '######################################### СПИСОК ПОЕЗДОВ ##############################################'.freeze
@@ -26,7 +27,7 @@ module ItemsForMenu
   SELECT_AN_ACTION_TO_CONTINUE = "Выберите действие для продолжения (e выход):".freeze
   ENTER_CARRIAGE_NUMBER = "Укажите номер вагона :".freeze
   ERROR_NO_CREATED_STATION = "НЕТУ СОЗДАННЫХ МАРШРУТОВ".freeze
-  ENTER_TRAIN_FOR_CARRIAGES = "Выберите поезд который хотите выбрать (e - Назад): ".freeze
+  ENTER_TRAIN = "Выберите поезд который хотите выбрать (e - Назад): ".freeze
   ENTER_MENU_CARRIAGE = "Выберите вагон: ".freeze
   ENTER_MENU_CARRIAGES_WHAT_CARRIGE = "Введите номер вагона который хотите отсоеденить от состава: ".freeze
   MESSAGE_NO_ATTACHED_CARRIAGES_CURRENT_TRAIN = "Нету подсоеденённых вагонов к этому поезду".freeze
@@ -168,8 +169,8 @@ module ItemsForMenu
     print ENTER_CARRIAGE_NUMBER
   end
 
-  def enter_train_for_carriages
-    print ENTER_TRAIN_FOR_CARRIAGES
+  def enter_train
+    print ENTER_TRAIN
   end
 
   def enter_menu_carriage
@@ -291,5 +292,9 @@ module ItemsForMenu
   def menu_delete_station_from_route
     enter_station_to_route
     print "удалена из маршрута: (e- назад):"
+  end
+
+  def control_interface_title_routes
+    puts CONTROL_INTERFACE_TITLE_ROUTES
   end
 end
