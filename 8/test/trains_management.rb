@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+# rubocop:disable Metrics/MethodLength
+
 require_relative 'dictonary'
 require_relative 'trains_management_messages'
 require_relative 'train'

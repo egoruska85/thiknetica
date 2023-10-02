@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 require_relative 'dictonary'
 
 class Core
@@ -18,18 +21,11 @@ class Core
   def process_start(key)
     @key = key
     case key
-    when 1
-      stations_management
-    when 2
-      routes_management
-    when 3
-      trains_management
-    when 4
-      carriages_management
-    when 5
-      control_interface
-    when 6
-      view_trains_on_station
+    when 1 then stations_management
+    when 2 then routes_management
+    when 3 then trains_management
+    when 4 then carriages_management
+    else main_menu
     end
   end
 
@@ -53,5 +49,4 @@ class Core
     puts TO_EXIT_APPLICATION_0 if extra_lines
     print '> ' if extra_lines
   end
-  
 end

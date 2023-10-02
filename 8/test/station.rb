@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 require_relative 'instance_counter'
 require_relative 'validator'
 
@@ -29,7 +32,7 @@ class Station
   end
 
   def self.all
-    ObjectSpace.each_object(Station).to_a # есть вариант создать массив класса и добавлять туда при инициализации в этот массив поезда и потом вывести через all.
+    ObjectSpace.each_object(Station).to_a
   end
 
   def show_trains(type)

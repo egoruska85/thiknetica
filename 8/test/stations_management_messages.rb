@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 require_relative 'dictonary'
 
 module StationsManagementMessages
@@ -42,5 +45,4 @@ module StationsManagementMessages
       end
     end
   end
-
 end

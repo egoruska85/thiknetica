@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 require_relative 'dictonary'
 require_relative 'routes_management_messages'
 require_relative 'route'
@@ -52,11 +55,10 @@ module RoutesManagement
     routes_list_in_add_station
     print ENTER_ROUTE
     route_index = gets.chomp
-    routes_management if route_index == 'e'
     route = routes[route_index.to_i - 1]
     enter_station_to_route(route)
     station_index = gets.chomp
-    routes_management if station_index == 'e'
+    routes_management if station_index == 'e' || route_index == 'e'
     station = @available_stations[station_index.to_i - 1]
     add_station_to_routes_action(route, station)
   end

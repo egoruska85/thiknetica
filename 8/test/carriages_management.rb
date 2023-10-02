@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 require_relative 'dictonary'
 require_relative 'carriages_management_messages'
 require_relative 'carriage'

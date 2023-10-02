@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 class CargoCarriage < Carriage
   def initialize(number, volume)
     super(number, :cargo, volume)

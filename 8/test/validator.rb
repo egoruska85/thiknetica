@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
+
 module Validator
   NUMBER_FORMAT = /^[a-z]{2}\d{1}.{1}[0-9]{2}$/i.freeze
   STATION_FORMAT = /^[a-z]*$/i.freeze

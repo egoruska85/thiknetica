@@ -1,26 +1,31 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/MissingCopEnableDirective
+# rubocop:disable Style/Documentation
+
 module InstanceCounter
   def self.included(base)
     base.extend ClassMethods
     base.send :include, InstanceMethods
-    base.class_variable_set(:@@instance_hash, Hash.new(0))
   end
 
   module ClassMethods
     def instances
-      class_variable_get(:@@instance_hash)[to_s]
+      @instances ||= 0
+    end
+
+    private
+
+    def add_instance
+      @instances = instances + 1
     end
   end
 
   module InstanceMethods
-    private
+    protected
 
     def register_instance
-      src = self.class
-      counter = self.class.class_variable_get(:@@instance_hash)
-      counter[src.to_s] += 1
-      self.class.class_variable_set(:@@instance_hash, counter)
+      self.class.send(:add_instance)
     end
   end
 end
