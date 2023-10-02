@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require_relative 'instance_counter'
-require_relative "validator"
+require_relative 'validator'
 
 class Route
   attr_reader :stations
@@ -19,6 +21,7 @@ class Route
 
   def destroy_station(station)
     return if [start_station, finish_station].include?(station)
+
     stations.delete(station)
   end
 
@@ -29,5 +32,4 @@ class Route
   def finish_station
     stations.last
   end
-
 end

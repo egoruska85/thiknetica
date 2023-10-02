@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InstanceCounter
   def self.included(base)
     base.extend ClassMethods
@@ -7,13 +9,11 @@ module InstanceCounter
 
   module ClassMethods
     def instances
-      self.class_variable_get(:@@instance_hash)[self.to_s]
+      class_variable_get(:@@instance_hash)[to_s]
     end
-
   end
 
   module InstanceMethods
-
     private
 
     def register_instance
@@ -22,6 +22,5 @@ module InstanceCounter
       counter[src.to_s] += 1
       self.class.class_variable_set(:@@instance_hash, counter)
     end
-
   end
 end

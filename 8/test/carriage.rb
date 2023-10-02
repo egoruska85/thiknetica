@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require_relative 'manufacturer'
-require_relative "validator"
+require_relative 'validator'
 
 class Carriage
   include Manufacturer
@@ -22,5 +24,4 @@ class Carriage
   def reserve_place(quantity)
     @reserved_places += quantity
   end
-
 end

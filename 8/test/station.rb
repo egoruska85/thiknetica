@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require_relative 'instance_counter'
-require_relative "validator"
+require_relative 'validator'
 
 class Station
   include InstanceCounter
@@ -14,10 +16,9 @@ class Station
     register_instance
   end
 
-  def each_train
-    trains.each { |train| yield(train)}
+  def each_train(&block)
+    trains.each(&block)
   end
-
 
   def add_train(train)
     trains << train
@@ -32,6 +33,6 @@ class Station
   end
 
   def show_trains(type)
-    trains.select{ |train| train.type == type }
+    trains.select { |train| train.type == type }
   end
 end
