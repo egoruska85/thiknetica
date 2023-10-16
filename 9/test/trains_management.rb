@@ -55,10 +55,11 @@ module TrainsManagement
       train = PassengerTrain.new(number)
     elsif type == '2'
       train = CargoTrain.new(number)
+    else
+      trains_management
     end
     print ENTER_MANUFACTURER_NAME
-    name_manufacturer = gets.chomp
-    train.name_manufacturer = name_manufacturer
+    train.name_manufacturer = gets.chomp
     trains << train
     message_create_train(train)
   end

@@ -13,13 +13,6 @@ module Validation
   #CREATED_STATION_EXIST_NAME = 'Станция с таким названием уже есть'
   #CREATED_TRAIN_EXIST_NUMBER = 'Поезд с таким номером уже есть'
 
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
-  end
-
   def self.included(base)
     base.extend ClassMethods
     base.send :include, InstanceMethods
