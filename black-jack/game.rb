@@ -32,6 +32,7 @@ class Game
   end
 
   def continue
+    validate_deck!
     loop do
       Round.new(user, diller, deck, bank).start
       quantity_rounds
@@ -40,6 +41,14 @@ class Game
   end
 
   private
+
+  def validate_deck!
+    if deck.deck.count < 6
+
+      puts 'Опа, а карты кончились, заново перемешаю колоду'
+      @deck = Deck.new
+    end
+  end
 
   def enter_continue
     menu_for_continue
@@ -51,7 +60,7 @@ class Game
     end
   rescue StandardError
     puts 'Неверный выбор, попробуйте еще.'
-    retry      
+    retry
   end
 
 end

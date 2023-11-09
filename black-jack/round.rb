@@ -25,7 +25,6 @@ class Round
   end
 
   def first_round
-    validate_deck!
     2.times { take_card(user) }
     user.show_info
 
@@ -35,6 +34,7 @@ class Round
   end
 
   def second_round
+    puts "Количество карт в колоде: #{deck.deck.count}(#{@deck.inspect})"
     open = false
     case make_choice
     when 2
@@ -46,13 +46,6 @@ class Round
   end
 
   private
-
-  def validate_deck!
-    return unless deck.deck.count < 6
-
-    puts 'Опа, а карты кончились, заново перемешаю колоду'
-    @deck = Deck.new
-  end
 
   def take_card(player)
     player.hand.push(deck.take_card)
@@ -116,6 +109,11 @@ class Round
   def diller_win
     puts "#{diller.name}-(Диллер) выйграл!"
     cash_to(diller)
+  end
+
+  def tie
+    puts 'Ничья'
+    cash_to(nil)
   end
 
   def cash_to(player)
