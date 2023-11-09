@@ -34,7 +34,7 @@ class Round
   end
 
   def second_round
-    puts "Количество карт в колоде: #{deck.deck.count}(#{@deck.inspect})"
+    puts "Количество карт в колоде: #{deck.deck.count}"
     open = false
     case make_choice
     when 2
